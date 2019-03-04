@@ -1,0 +1,35 @@
+.container {
+  display: flex;
+}
+ul {
+  flex: auto;
+}
+.dice {
+  display: block;
+  padding: 10px;
+  cursor: pointer;
+  list-style-type: none;
+  background: #ddd;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  margin: 10px;
+  line-height: 30px;
+}
+.buttons {
+  flex: auto;
+}
+
+.selected {
+  background: rgb(169, 186, 223);
+}
+
+button {
+  padding: 30px;
+}
+
+#resultat {
+  font-size: 30px;
+  text-align: center;
+  width: 100%;
+}
