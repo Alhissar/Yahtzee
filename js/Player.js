@@ -1,6 +1,6 @@
 import random from './functions.js';
 
-export default class Dices {
+export default class Player {
   constructor() {
     this.$dices = document.querySelectorAll('.dice');
     this.result = document.getElementById('resultat');
@@ -10,7 +10,7 @@ export default class Dices {
 
   get ordered() {
     const set = new Set(this.values);
-    return Array.from(set).sort().toString();
+    return [...set].sort().toString();
   }
 
   get values() {
@@ -42,13 +42,20 @@ export default class Dices {
   }
 
   isFull() {
-    if (this.yahtzee > 3) return false;
+    if (this.yahtzee.nb > 3) return false;
     const sameFiltered = this.sameDice().filter(value => value !== 0);
     return sameFiltered.length === 2;
   }
 
+  /**
+   * renvoie 1 pour une petite suite,
+   * renvoie 2 pour une Grande suite,
+   * sinon false
+   *
+   * @returns {Number | false} false | 1 | 2
+   */
   isStraight() {
-    if (this.yahtzee > 2) return false;
+    if (this.yahtzee.nb > 2) return false;
     const { ordered } = this;
     const long = new Set([
       '1,2,3,4,5',
@@ -94,15 +101,26 @@ export default class Dices {
   writeResult() {
     const { yahtzee } = this;
     let txt = '';
-    if (yahtzee >= 3) {
-      txt = 'Brelan';
+    this.result.innerHTML = '';
+    // console.log(yahtzee);
+    if (yahtzee) {
+      const { nb, dice } = yahtzee;
+      if (nb >= 3) {
+        txt = 'Brelan';
+      }
+      if (nb > 3) {
+        txt += ', Carré';
+      }
+      if (nb > 4) {
+        txt += ', YAHTZEE !!!';
+      }
+      this.result.innerHTML = `${txt} de ${dice}`;
     }
-    if (yahtzee > 3) {
-      txt += ', Carré';
+    if (this.isFull()) this.result.innerHTML += '<br>Full';
+    const suite = this.isStraight();
+    if (suite) {
+      const name = ['Petite suite', 'Grande SUITE'];
+      this.result.innerHTML += `\n${name[suite - 1]}`;
     }
-    if (yahtzee > 4) {
-      txt = ', YAHTZEE !!!';
-    }
-    this.result.textContent = txt;
   }
 }

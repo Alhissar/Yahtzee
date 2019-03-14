@@ -1,8 +1,7 @@
-import Dices from './Dices.js';
+import Player from './Player.js';
 import random from './functions.js';
 
-const game = new Dices();
-const player = game;
+const player = new Player();
 
 // onclick sur $dices
 player.$dices.forEach(($) => {

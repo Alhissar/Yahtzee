@@ -1,23 +1,30 @@
 .container {
+  display: block;
+  width: 360px;
+  margin: auto;
+}
+
+.dices {
   display: flex;
+  justify-content: space-evenly;
 }
-ul {
-  flex: auto;
-}
+
 .dice {
   display: block;
   padding: 10px;
   cursor: pointer;
-  list-style-type: none;
   background: #ddd;
-  width: 30px;
-  height: 30px;
+  width: 40px;
+  height: 40px;
   text-align: center;
-  margin: 10px;
-  line-height: 30px;
+  margin: 5px;
+  line-height: 40px;
+  border-radius: 10px;
 }
+
 .buttons {
-  flex: auto;
+  display: flex;
+  justify-content: center;
 }
 
 .selected {
