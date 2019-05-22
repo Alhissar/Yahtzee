@@ -2,15 +2,18 @@ import random from './functions.js';
 
 export default class Dices {
   constructor() {
+    // ?
+    this.ordered = [];
+
     this.selected = [0, 0, 0, 0, 0];
     this.result = [0, 0, 0, 0, 0, 0];
     this.$dices = document.querySelectorAll('.dice');
   }
 
-  get ordered() {
-    const set = new Set(this.values);
-    return [...set].sort().toString();
-  }
+  // get ordered() {
+  //   const set = new Set(this.values);
+  //   return [...set].sort().toString();
+  // }
 
   get values() {
     return [...this.$dices].map(dom => Number(dom.textContent));
@@ -28,12 +31,12 @@ export default class Dices {
     return result[x - 1];
   }
 
-  display({ yams, multi, dices }) {
+  display({ dices, yams, multi }) {
     const $cells = {
       multi: [...document.querySelectorAll('.result.multi .score')],
       yams: [...document.querySelectorAll('.result.yams .score')],
     };
-    //affichage des dés
+    // affichage des dés
     this.$dices.forEach(($d, i) => {
       $d.textContent = dices[i];
     });
@@ -47,6 +50,7 @@ export default class Dices {
         $score.textContent = yams[i].scoreNow;
       }
     });
+    // affichage des multis
     $cells.multi.forEach(($score, i) => {
       $score.textContent = '';
       if (multi[i].isTrue && !multi[i].isSaved) {
@@ -72,7 +76,8 @@ export default class Dices {
     const { nb } = this.yahtzee(player);
     if (nb > 2) return false;
 
-    const { ordered } = this;
+    const { dices } = player;
+    const ordered = this.order(dices);
     const long = new Set([
       '1,2,3,4,5',
       '2,3,4,5,6',
@@ -88,6 +93,12 @@ export default class Dices {
     ]);
     if (short.has(ordered)) return 1;
     return false;
+  }
+
+  order(dices) {
+    const set = new Set(dices);
+    this.ordered = [...set].sort().toString();
+    return this.ordered;
   }
 
   randomAll() {

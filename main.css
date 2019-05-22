@@ -11,7 +11,7 @@
 .dices {
   display: flex;
   justify-content: space-evenly;
-  font-size: 3vw;
+  font-size: 28px;
 }
 
 .dice {

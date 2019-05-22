@@ -34,11 +34,8 @@ document.getElementById('play').addEventListener('click', (e) => {
     e.currentTarget.disabled = true;
   }
   player.writeResult();
-  console.log(player.dices);
 });
 
 player.writeResult();
-console.clear();
-console.log(player.dices);
 
 window.player = player;
