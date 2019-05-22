@@ -1,5 +1,9 @@
+* {
+  box-sizing: border-box;
+}
 .container {
-  display: block;
+  display: grid;
+  row-gap: 2vw;
   width: 360px;
   margin: auto;
 }
@@ -7,6 +11,7 @@
 .dices {
   display: flex;
   justify-content: space-evenly;
+  font-size: 3vw;
 }
 
 .dice {
@@ -14,8 +19,8 @@
   padding: 10px;
   cursor: pointer;
   background: #ddd;
-  width: 40px;
-  height: 40px;
+  width: 60px;
+  height: 60px;
   text-align: center;
   margin: 5px;
   line-height: 40px;
@@ -33,6 +38,43 @@
 
 button {
   padding: 30px;
+}
+
+.results {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-column-gap: 1vw;
+  padding: 10px;
+  font-size: 24px;
+  line-height: 48px;
+  text-align: center;
+  border: 1px solid #988;
+  border-radius: 8px;
+
+}
+
+.result {
+  display: flex;
+  margin: 10px 0;
+  height: 48px;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+}
+#yahtzee {
+  grid-column: span 2;
+  height: 72px;
+  line-height: 66px;
+}
+.result>.name {
+  flex: 2;
+  background-color: #bed6e4;
+}
+
+.result>.score {
+  flex: 1;
+  background-color: #fff3cc;
+  border: 3px solid transparent;
+  border: inset 3px #EADFB788;
 }
 
 #resultat {

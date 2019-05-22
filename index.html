@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,6 +9,7 @@
   <link rel="stylesheet" type="text/css" media="screen" href="main.css">
   <script src="js/main.js" type="module" defer></script>
 </head>
+
 <body>
   <div class="container">
     <div class="dices">
@@ -19,10 +21,71 @@
     </div>
 
     <div class="buttons">
-      <button id = "play">Relancer</button>
+      <button id="play">Relancer</button>
     </div>
 
+    <div class="results">
+      <div>
+        <div class="result multi">
+          <div class="name">1 x</div>
+          <div class="score"></div>
+        </div>
+        <div class="result multi">
+          <div class="name">2 x</div>
+          <div class="score"></div>
+        </div>
+        <div class="result multi">
+          <div class="name">3 x</div>
+          <div class="score"></div>
+        </div>
+        <div class="result multi">
+          <div class="name">4 x</div>
+          <div class="score"></div>
+        </div>
+        <div class="result multi">
+          <div class="name">5 x</div>
+          <div class="score"></div>
+        </div>
+        <div class="result multi">
+          <div class="name">6 x</div>
+          <div class="score"></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="result yams">
+          <div class="name">Brelan</div>
+          <div class="score"></div>
+        </div>
+        <div class="result yams">
+          <div class="name">Carré</div>
+          <div class="score"></div>
+        </div>
+        <div class="result yams">
+          <div class="name">suite</div>
+          <div class="score"></div>
+        </div>
+        <div class="result yams">
+          <div class="name">Suite</div>
+          <div class="score"></div>
+        </div>
+        <div class="result yams">
+          <div class="name">Full</div>
+          <div class="score"></div>
+        </div>
+        <div class="result yams">
+          <div class="name">Bonus</div>
+          <div class="score"></div>
+        </div>
+      </div>
+
+      <div id="yahtzee" class="result yams">
+        <div class="name">Yahtzee</div>
+        <div class="score"></div>
+      </div>
+    </div>
     <div id="resultat"></div>
   </div>
 </body>
+
 </html>

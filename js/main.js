@@ -1,39 +1,44 @@
+import Dices from './Dices.js';
 import Player from './Player.js';
 import random from './functions.js';
 
-const player = new Player();
+const player = new Player('You');
+const dices = new Dices();
 
 // onclick sur $dices
-player.$dices.forEach(($) => {
+dices.$dices.forEach(($) => {
   $.addEventListener('click', (e) => {
     if (player.counter === 3) return;
     const nb = Number(e.currentTarget.id);
     if (e.currentTarget.classList.contains('selected')) {
       e.currentTarget.classList.remove('selected');
-      player.selected[nb] = !1;
+      dices.selected[nb] = !1;
     } else {
       e.currentTarget.classList.add('selected');
-      player.selected[nb] = !0;
+      dices.selected[nb] = !0;
     }
   });
 });
 
-// onclick sur boutton
+// onclick sur $relancer
 document.getElementById('play').addEventListener('click', (e) => {
   if (player.counter === 3) return;
-  player.selected.forEach((dice, i) => {
+  dices.selected.forEach((dice, i) => {
     if (!dice) {
-      player.$dices[i].textContent = random();
+      player.dices[i] = random();
     }
   });
-  player.clearSelected();
+  dices.clearSelected();
   // player.counter += 1;
   if (player.counter === 3) {
     e.currentTarget.disabled = true;
   }
   player.writeResult();
+  console.log(player.dices);
 });
 
-player.randomAll();
 player.writeResult();
+console.clear();
+console.log(player.dices);
+
 window.player = player;
