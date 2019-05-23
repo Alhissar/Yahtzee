@@ -59,6 +59,12 @@ button {
   height: 48px;
   border: 1px solid #bbb;
   border-radius: 4px;
+  cursor: pointer;
+}
+.result.saved {
+  border: 1px solid #e0e0e0;
+  color: #999;
+  cursor: not-allowed;
 }
 #yahtzee {
   grid-column: span 2;
@@ -69,12 +75,20 @@ button {
   flex: 2;
   background-color: #bed6e4;
 }
+.result.saved>.name {
+  background-color: #e6edf1;
+}
 
 .result>.score {
   flex: 1;
   background-color: #fff3cc;
   border: 3px solid transparent;
   border: inset 3px #EADFB788;
+}
+.result.saved>.score {
+  background-color: #f1efec;
+  border: inset 3px #f0e9d04d;
+
 }
 
 #resultat {

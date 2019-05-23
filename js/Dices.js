@@ -1,4 +1,4 @@
-import random from './functions.js';
+import { random } from './functions.js';
 
 export default class Dices {
   constructor() {
@@ -8,12 +8,8 @@ export default class Dices {
     this.selected = [0, 0, 0, 0, 0];
     this.result = [0, 0, 0, 0, 0, 0];
     this.$dices = document.querySelectorAll('.dice');
+    this.$scores = document.querySelectorAll('.result');
   }
-
-  // get ordered() {
-  //   const set = new Set(this.values);
-  //   return [...set].sort().toString();
-  // }
 
   get values() {
     return [...this.$dices].map(dom => Number(dom.textContent));
@@ -31,33 +27,34 @@ export default class Dices {
     return result[x - 1];
   }
 
-  display({ dices, yams, multi }) {
-    const $cells = {
-      multi: [...document.querySelectorAll('.result.multi .score')],
-      yams: [...document.querySelectorAll('.result.yams .score')],
-    };
+  display(player) {
+    this.clearSelected();
     // affichage des dés
     this.$dices.forEach(($d, i) => {
-      $d.textContent = dices[i];
+      $d.textContent = player.dices[i];
     });
-    // affichage des scores de yams
-    $cells.yams.forEach(($score, i) => {
-      if (yams[i].isSaved) {
-        return;
-      }
-      $score.textContent = '';
-      if (yams[i].isTrue && !yams[i].isSaved) {
-        $score.textContent = yams[i].scoreNow;
-      }
+    // affichage compteur
+    document.querySelector('.counter').textContent = player.counter;
+    // efface tous les scores
+    // BUGFIX
+    // ne pas effacer si isSaved
+    const names = ['multi', 'yams'];
+    names.forEach((type) => {
+      const $scores = document.querySelectorAll(`.result.${type}`);
+      player[type].forEach((score, i) => {
+        if ((score.isSaved === 0)
+      || ((score.isSaved) > 0)) return;
+        const $score = $scores[i];
+        const $val = $score.querySelector('.score');
+        $score.classList.remove('selectable');
+        if (!score.isSaved) {
+          $val.textContent = score.scoreNow;
+          $score.classList.add('selectable');
+        } else {
+          $val.textContent = '';
+        }
+      });
     });
-    // affichage des multis
-    $cells.multi.forEach(($score, i) => {
-      $score.textContent = '';
-      if (multi[i].isTrue && !multi[i].isSaved) {
-        $score.textContent = multi[i].scoreNow;
-      }
-    });
-    this.$cells = $cells;
   }
 
   isFull(player) {
@@ -75,7 +72,6 @@ export default class Dices {
   isStraight(player) {
     const { nb } = this.yahtzee(player);
     if (nb > 2) return false;
-
     const { dices } = player;
     const ordered = this.order(dices);
     const long = new Set([
@@ -83,7 +79,6 @@ export default class Dices {
       '2,3,4,5,6',
     ]);
     if (long.has(ordered)) return 2;
-
     const short = new Set([
       '1,2,3,4',
       '2,3,4,5',
