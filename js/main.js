@@ -1,6 +1,6 @@
 import Dices from './Dices.js';
 import Player from './Player.js';
-import { random, clickDices, clickResult } from './functions.js';
+import { clickDices, clickResult } from './functions.js';
 
 
 const player = new Player('You');
@@ -12,7 +12,6 @@ dices.$dices.forEach(($) => {
 });
 
 // onclick sur scores
-//
 // multis
 let type = 'multi';
 document.querySelectorAll('.result.multi')
@@ -33,7 +32,7 @@ document.getElementById('play')
     // relance des dés
     dices.selected.forEach((dice, i) => {
       if (!dice) {
-        player.dices[i] = random();
+        player.random(i);
       }
     });
     // remove class selected

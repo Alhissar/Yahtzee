@@ -1,10 +1,7 @@
-import { random } from './functions.js';
-
 export default class Dices {
   constructor() {
     // ?
     this.ordered = [];
-
     this.selected = [0, 0, 0, 0, 0];
     this.result = [0, 0, 0, 0, 0, 0];
     this.$dices = document.querySelectorAll('.dice');
@@ -36,8 +33,6 @@ export default class Dices {
     // affichage compteur
     document.querySelector('.counter').textContent = player.counter;
     // efface tous les scores
-    // BUGFIX
-    // ne pas effacer si isSaved
     const names = ['multi', 'yams'];
     names.forEach((type) => {
       const $scores = document.querySelectorAll(`.result.${type}`);
@@ -46,10 +41,8 @@ export default class Dices {
       || ((score.isSaved) > 0)) return;
         const $score = $scores[i];
         const $val = $score.querySelector('.score');
-        $score.classList.remove('selectable');
         if (!score.isSaved) {
           $val.textContent = score.scoreNow;
-          $score.classList.add('selectable');
         } else {
           $val.textContent = '';
         }
@@ -96,12 +89,6 @@ export default class Dices {
     return this.ordered;
   }
 
-  randomAll() {
-    this.$dices.forEach(($) => {
-      $.textContent = random();
-    });
-  }
-
   /**
   *Renvoie un tableau avec le nb de dés identiques
   *
@@ -109,7 +96,6 @@ export default class Dices {
   */
   sameDice({ dices }) {
     this.result = [0, 0, 0, 0, 0, 0];
-    // const { dices } = player;
     dices.forEach((dice) => {
       this.result[dice - 1] += 1;
     });

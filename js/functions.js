@@ -1,7 +1,3 @@
-export function random() {
-  return Math.floor((Math.random() * 6)) + 1;
-}
-
 export function clickDices({ player, dices }) {
   return function clickDice(e) {
     if (player.counter === 0) return;
@@ -18,17 +14,26 @@ export function clickDices({ player, dices }) {
 
 export function clickResult({ player, type, i }) {
   return function clicRes(e) {
+    // on sort si tout est cliqué
     const $div = e.currentTarget;
     if ((player[type][i].isSaved === 0)
-      || (player[type][i].isSaved) > 0) return;
+    || (player[type][i].isSaved) > 0) return;
     player[type][i].isSaved = player[type][i].scoreNow;
     $div.classList.add('saved');
-    player.counter = 3;
-    document.getElementById('play').disabled = false;
-    // relancer random
-    player.dices = player.randomAll();
-    player.writeResult();
+    const total = document.querySelectorAll('.result').length;
+    const saved = document.querySelectorAll('.result.saved').length;
+    if (saved === total) {
+      // fin de partie
+      player.counter = 0;
+      document.getElementById('play').disabled = true;
+      player.writeResult();
+    } else {
+      // nouveau tour
+      player.counter = 3;
+      document.getElementById('play').disabled = false;
+      // relancer random
+      player.dices = player.randomAll();
+      player.writeResult();
+    }
   };
 }
-
-// export function clickScore({ player, i }) {

@@ -1,5 +1,4 @@
 import Dices from './Dices.js';
-import { random } from './functions.js';
 
 const dices = new Dices();
 
@@ -48,7 +47,6 @@ export default class Player {
     const fill = (res) => {
       res.forEach((o) => {
         o.isSaved = null;
-        // o.savedScore = 0;
         o.isTrue = !1;
       });
     };
@@ -63,8 +61,14 @@ export default class Player {
     return bonus.reduce((p, cur) => p + cur);
   }
 
+  random(i = -1) {
+    const rand = Math.floor((Math.random() * 6)) + 1;
+    if (i >= 0) this.dices[i] = rand;
+    return rand;
+  }
+
   randomAll() {
-    return this.dices.map(() => random());
+    return this.dices.map(() => this.random());
   }
 
   scoreYams(i) {

@@ -67,6 +67,11 @@ button {
   cursor: not-allowed;
 }
 #yahtzee {
+  /* grid-column: span 2; */
+  /* height: 72px; */
+  /* line-height: 66px; */
+}
+#total {
   grid-column: span 2;
   height: 72px;
   line-height: 66px;
