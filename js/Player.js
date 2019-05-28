@@ -6,7 +6,7 @@ export default class Player {
   constructor(name) {
     this.dices = [0, 0, 0, 0, 0];
     this.dices = this.randomAll();
-    this.result = document.getElementById('resultat');
+    // this.result = document.getElementById('resultat');
     this.counter = 3;
     this.name = name;
     // initialisation des resultats
@@ -61,6 +61,23 @@ export default class Player {
     return bonus.reduce((p, cur) => p + cur);
   }
 
+  get sum() {
+    let sum = 0;
+    this.multi.forEach((hand) => {
+      sum += hand.isSaved;
+    });
+    return sum;
+  }
+
+  get total() {
+    const multi = this.multi.reduce((pre, cur) => {
+      const prevScore = pre.isSaved || 0;
+      const currScore = cur.isSaved || 0;
+      return prevScore + currScore;
+    }, 0);
+    return this.sum + this.bonus + multi;
+  }
+
   random(i = -1) {
     const rand = Math.floor((Math.random() * 6)) + 1;
     if (i >= 0) this.dices[i] = rand;
@@ -90,9 +107,6 @@ export default class Player {
 
   writeResult() {
     const yahtzee = dices.yahtzee(this);
-    let txt = `${this.name},<br>`;
-    // TODO à mettre dans Dices
-    this.result.innerHTML = '';
     // variable objet pour sauvegarde des résultats
     const multi = [];
     const yams = [];
@@ -102,42 +116,38 @@ export default class Player {
     yams.fill(false);
     // calcul des yams
     if (yahtzee) {
-      const { nb, dice } = yahtzee;
+      const { nb } = yahtzee;
       if (nb >= 3) {
-        txt += 'Brelan';
+        // txt += 'Brelan';
         yams[0] = true;
       }
       if (nb > 3) {
-        txt += ', Carré';
+        // txt += ', Carré';
         yams[1] = true;
       }
       if (nb > 4) {
-        txt += ', YAHTZEE !!!';
+        // txt += ', YAHTZEE !!!';
         yams[6] = true;
       }
-      // TODO deplacer vers Dices
-      this.result.innerHTML = `${txt} de ${dice}`;
     }
     if (dices.isFull(this)) {
-      // TODO deplacer vers Dices
-      this.result.innerHTML += '<br>Full';
+      // this.result.innerHTML += '<br>Full';
       yams[4] = true;
     }
     const suite = dices.isStraight(this);
     if (suite) {
-      // TODO deplacer dans Dices
-      const name = ['Petite suite', 'Grande SUITE'];
-      this.result.innerHTML += `\n${name[suite - 1]}`;
+      // const name = ['Petite suite', 'Grande SUITE'];
+      // this.result.innerHTML += `\n${name[suite - 1]}`;
       yams[2] = true;
       yams[3] = (suite === 2);
     }
-    // calcul des yams
+    // sauvegarde des yams
     this.yams.forEach((hand, i) => {
       // toujours true : bonus (this.yams[5])
       hand.isTrue = (i === 5) ? true : yams[i];
       hand.scoreNow = this.scoreYams(i);
     });
-    // calcul des multis
+    // sauvegarde des multis
     const results = dices.sameDice(this);
     this.multi.forEach((hand, i) => {
       hand.isTrue = (results[i] > 0) ? results[i] : 0;

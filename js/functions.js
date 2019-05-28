@@ -35,5 +35,26 @@ export function clickResult({ player, type, i }) {
       player.dices = player.randomAll();
       player.writeResult();
     }
+    // ajouter la gestion du total
+  };
+}
+
+export function clickTurn(player, dices) {
+  return (e) => {
+    if (player.counter === 0) return;
+    // relance des dés
+    dices.selected.forEach((dice, i) => {
+      if (!dice) {
+        player.random(i);
+      }
+    });
+    // remove class selected
+    dices.clearSelected();
+    // compteur
+    player.counter -= 1;
+    player.writeResult();
+    if (player.counter === 0) {
+      e.currentTarget.disabled = true;
+    }
   };
 }
