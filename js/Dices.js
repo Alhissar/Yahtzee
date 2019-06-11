@@ -48,9 +48,8 @@ export default class Dices {
         }
       });
     });
-    if (player.sum >= 63) {
-      document.querySelector('#sum .score').textContent = 25;
-    }
+    document.querySelector('#sum .score').textContent = player.bonus;
+    document.querySelector('#total .score').textContent = player.total;
   }
 
   isFull(player) {

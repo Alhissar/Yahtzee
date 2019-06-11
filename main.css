@@ -38,6 +38,7 @@ body {
   /* margin: 5px; */
   line-height: 86px;
   border-radius: 10px;
+  transition: all 0.8s cubic-bezier(0.075, 0.82, 0.165, 1);
 }
 
 .buttons {

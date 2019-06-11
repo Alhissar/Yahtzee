@@ -6,7 +6,6 @@ export default class Player {
   constructor(name) {
     this.dices = [0, 0, 0, 0, 0];
     this.dices = this.randomAll();
-    // this.result = document.getElementById('resultat');
     this.counter = 3;
     this.name = name;
     // initialisation des resultats
@@ -57,25 +56,28 @@ export default class Player {
   }
 
   get bonus() {
-    const [...bonus] = this.dices;
-    return bonus.reduce((p, cur) => p + cur);
+    return (this.sums.multi >= 63) ? 25 : 0;
   }
 
-  get sum() {
-    let sum = 0;
-    this.multi.forEach((hand) => {
-      sum += hand.isSaved;
+  get dicesSum() {
+    const [...allDices] = this.dices;
+    return allDices.reduce((p, cur) => p + cur);
+  }
+
+  get sums() {
+    const sums = {};
+    ['multi', 'yams'].forEach((type) => {
+      let sum = 0;
+      this[type].forEach((result) => {
+        sum += result.isSaved;
+      });
+      sums[type] = sum;
     });
-    return sum;
+    return sums;
   }
 
   get total() {
-    const multi = this.multi.reduce((pre, cur) => {
-      const prevScore = pre.isSaved || 0;
-      const currScore = cur.isSaved || 0;
-      return prevScore + currScore;
-    }, 0);
-    return this.sum + this.bonus + multi;
+    return this.sums.multi + this.sums.yams + this.bonus;
   }
 
   random(i = -1) {
@@ -92,7 +94,7 @@ export default class Player {
     if (!this.yams[i].isTrue) return 0;
     let score = 0;
     const scoreBase = this.yams[i].score;
-    score = scoreBase + this.bonus;
+    score = scoreBase + this.dicesSum;
     return score;
   }
 
@@ -118,15 +120,15 @@ export default class Player {
     if (yahtzee) {
       const { nb } = yahtzee;
       if (nb >= 3) {
-        // txt += 'Brelan';
+        // 'Brelan';
         yams[0] = true;
       }
       if (nb > 3) {
-        // txt += ', Carré';
+        // 'Carré';
         yams[1] = true;
       }
       if (nb > 4) {
-        // txt += ', YAHTZEE !!!';
+        // 'YAHTZEE !!!';
         yams[6] = true;
       }
     }
