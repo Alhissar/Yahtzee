@@ -1,7 +1,8 @@
 export function clickDices({ player, dices }) {
   return function clickDice(e) {
     if (player.counter === 0) return;
-    const nb = Number(e.currentTarget.id);
+    // on prend le chiffre dans l'id (par ex. 4 dans #d4)
+    const nb = Number(e.currentTarget.id[1]);
     if (e.currentTarget.classList.contains('selected')) {
       e.currentTarget.classList.remove('selected');
       dices.selected[nb] = !1;

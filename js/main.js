@@ -24,4 +24,6 @@ document.getElementById('play')
   .addEventListener('click', clickTurn(player, dices));
 
 player.writeResult();
+window.dices = dices;
 window.player = player;
+// window.card = cards;

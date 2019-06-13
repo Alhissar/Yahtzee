@@ -1,3 +1,5 @@
+import Card from './Card.js';
+
 export default class Dices {
   constructor() {
     // ?
@@ -5,6 +7,12 @@ export default class Dices {
     this.selected = [0, 0, 0, 0, 0];
     this.result = [0, 0, 0, 0, 0, 0];
     this.$dices = document.querySelectorAll('.dice');
+    this.cards = [];
+    for (let i = 0; i < 5; i += 1) {
+      const newCard = new Card(i, i, 4);
+      this.cards.push(newCard);
+      // newCard.draw({ i, color: 0 });
+    }
     this.$scores = document.querySelectorAll('.result');
   }
 
@@ -26,9 +34,11 @@ export default class Dices {
 
   display(player) {
     this.clearSelected();
-    // affichage des dés
-    this.$dices.forEach(($d, i) => {
-      $d.textContent = player.dices[i];
+    // affichage des cartes
+    // FIXBUG
+    this.cards.forEach((card, i) => {
+      const infos = player.dices[i];
+      card.draw(infos.number - 1, infos.color);
     });
     // affichage compteur
     document.querySelector('.counter').textContent = player.counter;
@@ -52,10 +62,10 @@ export default class Dices {
     document.querySelector('#total .score').textContent = player.total;
   }
 
-  isFull(player) {
-    const { nb } = this.yahtzee(player);
+  isFull(dices) {
+    const { nb } = this.yahtzee(dices);
     if (nb > 3) return false;
-    const sameFiltered = this.sameDice(player).filter(value => value !== 0);
+    const sameFiltered = this.sameDice(dices).filter(value => value !== 0);
     return sameFiltered.length === 2;
   }
 
@@ -64,10 +74,10 @@ export default class Dices {
  * sinon false
  * @returns {Number | false} false | 1 | 2
  */
-  isStraight(player) {
-    const { nb } = this.yahtzee(player);
+  isStraight(dices) {
+    const { nb } = this.yahtzee(dices);
     if (nb > 2) return false;
-    const { dices } = player;
+    // const { dices } = player;
     const ordered = this.order(dices);
     const long = new Set([
       '1,2,3,4,5',
@@ -86,7 +96,11 @@ export default class Dices {
   }
 
   order(dices) {
-    const set = new Set(dices);
+    // const set = new Set(dices);
+    const set = new Set();
+    dices.forEach(({ number }) => {
+      set.add(number);
+    });
     this.ordered = [...set].sort().toString();
     return this.ordered;
   }
@@ -96,16 +110,21 @@ export default class Dices {
   *
   * @returns {Array} Tableau : ex. [0, 1, 2, 0, 2, 0]
   */
-  sameDice({ dices }) {
+  sameDice(dices) {
     this.result = [0, 0, 0, 0, 0, 0];
-    dices.forEach((dice) => {
-      this.result[dice - 1] += 1;
+    dices.forEach(({ number }) => {
+      this.result[number - 1] += 1;
     });
     return this.result;
   }
 
-  yahtzee(player) {
-    const result = this.sameDice(player);
+  /**
+   * renvoie infos
+   * @param {Array} dices
+   * @returns {Object} { nb, dice }
+   */
+  yahtzee(dices) {
+    const result = this.sameDice(dices);
     // calcul des brelan, carre...
     const nb = result.reduce((acc, curr) => (curr > acc ? curr : acc), 0);
     if (nb < 3) return false;

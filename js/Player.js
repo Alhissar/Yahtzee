@@ -4,7 +4,14 @@ const dices = new Dices();
 
 export default class Player {
   constructor(name) {
-    this.dices = [0, 0, 0, 0, 0];
+    this.dices = [];
+    for (let i = 0; i < 5; i += 1) {
+      const dice = {
+        number: 0,
+        color: 0,
+      };
+      this.dices.push(dice);
+    }
     this.dices = this.randomAll();
     this.counter = 3;
     this.name = name;
@@ -61,7 +68,12 @@ export default class Player {
 
   get dicesSum() {
     const [...allDices] = this.dices;
-    return allDices.reduce((p, cur) => p + cur);
+    // return allDices.reduce((p, cur) => p.number + cur.number);
+    let sum = 0;
+    allDices.forEach((dice) => {
+      sum += dice.number;
+    });
+    return sum;
   }
 
   get sums() {
@@ -80,10 +92,14 @@ export default class Player {
     return this.sums.multi + this.sums.yams + this.bonus;
   }
 
-  random(i = -1) {
-    const rand = Math.floor((Math.random() * 6)) + 1;
-    if (i >= 0) this.dices[i] = rand;
-    return rand;
+  random(nb = -1) {
+    const number = Math.floor((Math.random() * 6)) + 1;
+    const color = Math.floor((Math.random() * 5));
+    if (nb >= 0) this.dices[nb].number = number;
+    // todo ajouter la vérif de carte en double
+    // (option)
+    if (nb >= 0) this.dices[nb].color = color;
+    return { number, color };
   }
 
   randomAll() {
@@ -108,7 +124,7 @@ export default class Player {
   }
 
   writeResult() {
-    const yahtzee = dices.yahtzee(this);
+    const yahtzee = dices.yahtzee(this.dices);
     // variable objet pour sauvegarde des résultats
     const multi = [];
     const yams = [];
@@ -132,11 +148,10 @@ export default class Player {
         yams[6] = true;
       }
     }
-    if (dices.isFull(this)) {
-      // this.result.innerHTML += '<br>Full';
+    if (dices.isFull(this.dices)) {
       yams[4] = true;
     }
-    const suite = dices.isStraight(this);
+    const suite = dices.isStraight(this.dices);
     if (suite) {
       // const name = ['Petite suite', 'Grande SUITE'];
       // this.result.innerHTML += `\n${name[suite - 1]}`;
@@ -150,7 +165,7 @@ export default class Player {
       hand.scoreNow = this.scoreYams(i);
     });
     // sauvegarde des multis
-    const results = dices.sameDice(this);
+    const results = dices.sameDice(this.dices);
     this.multi.forEach((hand, i) => {
       hand.isTrue = (results[i] > 0) ? results[i] : 0;
       hand.scoreNow = this.scoreMulti(i);
