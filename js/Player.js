@@ -92,6 +92,29 @@ export default class Player {
     return this.sums.multi + this.sums.yams + this.bonus;
   }
 
+  displayScores() {
+    // affichage compteur
+    document.querySelector('.counter').style.backgroundPosition = `left -${27 * (this.counter - 1)}px top 0`;
+    // efface tous les scores  !!!  dans PLAYER
+    const names = ['multi', 'yams'];
+    names.forEach((type) => {
+      const $scores = document.querySelectorAll(`.result.${type}`);
+      this[type].forEach((score, i) => {
+        if ((score.isSaved === 0)
+          || ((score.isSaved) > 0)) return;
+        const $score = $scores[i];
+        const $val = $score.querySelector('.score');
+        if (!score.isSaved) {
+          $val.textContent = score.scoreNow;
+        } else {
+          $val.textContent = '';
+        }
+      });
+    });
+    document.querySelector('#sum .score').textContent = this.bonus;
+    document.querySelector('#total .score').textContent = this.total;
+  }
+
   random(nb = -1) {
     const number = Math.floor((Math.random() * 6)) + 1;
     const color = Math.floor((Math.random() * 5));
@@ -125,7 +148,6 @@ export default class Player {
 
   writeResult() {
     const yahtzee = dices.yahtzee(this.dices);
-    // variable objet pour sauvegarde des résultats
     const multi = [];
     const yams = [];
     multi.length = 6;
@@ -171,6 +193,6 @@ export default class Player {
       hand.scoreNow = this.scoreMulti(i);
     });
 
-    dices.display(this);
+    this.displayScores();
   }
 }

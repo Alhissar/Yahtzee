@@ -27,8 +27,8 @@ export default class Card {
       color * 100, 0,
       100, 100,
 
-      25, 65,
-      150, 150);
+      50, 90,
+      100, 100);
     // left color
     this.ctx.drawImage(this.colors,
       color * 100, 0,
@@ -44,11 +44,10 @@ export default class Card {
       8, 8,
       27, 27);
 
-    // left color
     this.ctx.translate(100, 140);
     this.ctx.rotate(Math.PI);
     this.ctx.translate(-100, -140);
-
+    // right color
     this.ctx.drawImage(this.colors,
       color * 100, 0,
       100, 100,

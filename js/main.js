@@ -15,15 +15,18 @@ dices.$dices.forEach(($) => {
 ['multi', 'yams'].forEach((type) => {
   document.querySelectorAll(`.result.${type}`)
     .forEach(($, i) => {
-      $.addEventListener('click', clickResult({ player, type, i }));
+      $.addEventListener('click', clickResult({
+        dices, player, type, i,
+      }));
     });
 });
 
 // onclick sur $relancer
 document.getElementById('play')
-  .addEventListener('click', clickTurn(player, dices));
+  .addEventListener('click', clickTurn({ player, dices }));
 
 player.writeResult();
+dices.display(player.dices);
 window.dices = dices;
 window.player = player;
 // window.card = cards;

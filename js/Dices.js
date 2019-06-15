@@ -11,8 +11,15 @@ export default class Dices {
     for (let i = 0; i < 5; i += 1) {
       const newCard = new Card(i, i, 4);
       this.cards.push(newCard);
-      // newCard.draw({ i, color: 0 });
     }
+    this.pos = [
+      'translate(35%, 15%) rotate(-20deg)',
+      'translate(77%, -1%) rotate(-8deg)',
+      'translate(125%, -5%) rotate(0)',
+      'translate(180%, -1%) rotate(10deg)',
+      'translate(220%, 15%) rotate(20deg)',
+      'translate(129%, 128%) rotate(-180deg)',
+    ];
     this.$scores = document.querySelectorAll('.result');
   }
 
@@ -32,34 +39,17 @@ export default class Dices {
     return result[x - 1];
   }
 
-  display(player) {
+  display(dices) {
     this.clearSelected();
-    // affichage des cartes
-    // FIXBUG
-    this.cards.forEach((card, i) => {
-      const infos = player.dices[i];
-      card.draw(infos.number - 1, infos.color);
-    });
-    // affichage compteur
-    document.querySelector('.counter').textContent = player.counter;
-    // efface tous les scores
-    const names = ['multi', 'yams'];
-    names.forEach((type) => {
-      const $scores = document.querySelectorAll(`.result.${type}`);
-      player[type].forEach((score, i) => {
-        if ((score.isSaved === 0)
-      || ((score.isSaved) > 0)) return;
-        const $score = $scores[i];
-        const $val = $score.querySelector('.score');
-        if (!score.isSaved) {
-          $val.textContent = score.scoreNow;
-        } else {
-          $val.textContent = '';
-        }
+    // affichage des cartes avec delay
+    setTimeout(() => {
+      this.cards.forEach((card, i) => {
+        const infos = dices[i];
+        card.draw(infos.number - 1, infos.color);
       });
-    });
-    document.querySelector('#sum .score').textContent = player.bonus;
-    document.querySelector('#total .score').textContent = player.total;
+      // anim de la carte
+      this.parkOutAll(75);
+    }, 75);
   }
 
   isFull(dices) {
@@ -103,6 +93,33 @@ export default class Dices {
     });
     this.ordered = [...set].sort().toString();
     return this.ordered;
+  }
+
+  parkIn(cards, duration = 0) {
+    // anim des cartes avec delay
+    cards.forEach((index, t) => {
+      setTimeout(() => {
+        // eslint-disable-next-line prefer-destructuring
+        this.cards[index].canvas.style.transform = this.pos[5];
+      }, duration * t);
+    });
+  }
+
+  parkInAll(duration = 0) {
+    this.parkIn([0, 1, 2, 3, 4], duration);
+  }
+
+  parkOut(cards, duration = 75) {
+    cards.forEach((index, t) => {
+      setTimeout(() => {
+        // eslint-disable-next-line prefer-destructuring
+        this.cards[index].canvas.style.transform = this.pos[index];
+      }, duration * (t + 1));
+    });
+  }
+
+  parkOutAll(duration) {
+    this.parkOut([0, 1, 2, 3, 4], duration);
   }
 
   /**
