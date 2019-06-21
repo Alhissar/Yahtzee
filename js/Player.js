@@ -3,63 +3,11 @@ import Dices from './Dices.js';
 const dices = new Dices();
 
 export default class Player {
-  constructor(name) {
+  constructor() {
     this.dices = [];
-    for (let i = 0; i < 5; i += 1) {
-      const dice = {
-        number: 0,
-        color: 0,
-      };
-      this.dices.push(dice);
-    }
-    this.dices = this.randomAll();
-    this.counter = 3;
-    this.name = name;
-    // initialisation des resultats
-    this.yams = [
-      {
-        nom: 'Brelan',
-        score: 10,
-      },
-      {
-        nom: 'Carré',
-        score: 75,
-      },
-      {
-        nom: 'suite',
-        score: 15,
-      },
-      {
-        nom: 'Suite',
-        score: 30,
-      },
-      {
-        nom: 'Full',
-        score: 50,
-      },
-      {
-        nom: 'Bonus',
-        score: 0,
-      },
-      {
-        nom: 'YAHTZEE',
-        score: 100,
-      },
-    ];
     this.multi = [];
-    for (let i = 0; i < 6; i += 1) {
-      this.multi.push({ score: 0 });
-    }
-    const fill = (res) => {
-      res.forEach((o) => {
-        o.isSaved = null;
-        o.isTrue = !1;
-      });
-    };
-    fill(this.yams);
-    fill(this.multi);
-    // yams.bonus = true -- toujours--
-    this.yams[5].isTrue = true;
+    this.yams = [];
+    this.reset();
   }
 
   get bonus() {
@@ -68,7 +16,6 @@ export default class Player {
 
   get dicesSum() {
     const [...allDices] = this.dices;
-    // return allDices.reduce((p, cur) => p.number + cur.number);
     let sum = 0;
     allDices.forEach((dice) => {
       sum += dice.number;
@@ -115,6 +62,11 @@ export default class Player {
     document.querySelector('#total .score').textContent = this.total;
   }
 
+  endgame() {
+    this.counter = 0;
+    this.gameover = true;
+  }
+
   random(nb = -1) {
     const number = Math.floor((Math.random() * 6)) + 1;
     const color = Math.floor((Math.random() * 5));
@@ -127,6 +79,65 @@ export default class Player {
 
   randomAll() {
     return this.dices.map(() => this.random());
+  }
+
+  reset() {
+    this.gameover = false;
+    this.dices.length = 0;
+    for (let i = 0; i < 5; i += 1) {
+      const dice = {
+        number: 0,
+        color: 0,
+      };
+      this.dices.push(dice);
+    }
+    this.dices = this.randomAll();
+    this.counter = 3;
+    // initialisation des resultats
+    this.yams.length = 0;
+    this.yams = [{
+      nom: 'Brelan',
+      score: 10,
+    },
+    {
+      nom: 'Carré',
+      score: 75,
+    },
+    {
+      nom: 'suite',
+      score: 15,
+    },
+    {
+      nom: 'Suite',
+      score: 30,
+    },
+    {
+      nom: 'Full',
+      score: 50,
+    },
+    {
+      nom: 'Bonus',
+      score: 0,
+    },
+    {
+      nom: 'YAHTZEE',
+      score: 100,
+    },
+    ];
+    this.multi.length = 0;
+    for (let i = 0; i < 6; i += 1) {
+      this.multi.push({ score: 0 });
+    }
+    const fill = (res) => {
+      res.forEach((o) => {
+        o.isSaved = null;
+        o.isTrue = !1;
+      });
+    };
+    fill(this.yams);
+    fill(this.multi);
+    // yams.bonus = true -- toujours--
+    this.yams[5].isTrue = true;
   }
 
   scoreYams(i) {
@@ -175,8 +186,6 @@ export default class Player {
     }
     const suite = dices.isStraight(this.dices);
     if (suite) {
-      // const name = ['Petite suite', 'Grande SUITE'];
-      // this.result.innerHTML += `\n${name[suite - 1]}`;
       yams[2] = true;
       yams[3] = (suite === 2);
     }

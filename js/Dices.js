@@ -2,7 +2,6 @@ import Card from './Card.js';
 
 export default class Dices {
   constructor() {
-    // ?
     this.ordered = [];
     this.selected = [0, 0, 0, 0, 0];
     this.result = [0, 0, 0, 0, 0, 0];
@@ -18,9 +17,9 @@ export default class Dices {
       'translate(125%, -5%) rotate(0)',
       'translate(180%, -1%) rotate(10deg)',
       'translate(220%, 15%) rotate(20deg)',
-      'translate(129%, 128%) rotate(-180deg)',
+      'translate(129%, 150%) rotate(-180deg)',
     ];
-    this.$scores = document.querySelectorAll('.result');
+    this.timing = 75;
   }
 
   get values() {
@@ -48,8 +47,8 @@ export default class Dices {
         card.draw(infos.number - 1, infos.color);
       });
       // anim de la carte
-      this.parkOutAll(75);
-    }, 75);
+      this.parkOutAll();
+    }, this.timing);
   }
 
   isFull(dices) {
@@ -109,7 +108,7 @@ export default class Dices {
     this.parkIn([0, 1, 2, 3, 4], duration);
   }
 
-  parkOut(cards, duration = 75) {
+  parkOut(cards, duration = this.timing) {
     cards.forEach((index, t) => {
       setTimeout(() => {
         // eslint-disable-next-line prefer-destructuring

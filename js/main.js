@@ -1,6 +1,6 @@
 import Dices from './Dices.js';
 import Player from './Player.js';
-import { clickDices, clickResult, clickTurn } from './functions.js';
+import { clickDices, clickResult, clickTurn, resultToggle } from './functions.js';
 
 
 const player = new Player('You');
@@ -25,8 +25,10 @@ dices.$dices.forEach(($) => {
 document.getElementById('play')
   .addEventListener('click', clickTurn({ player, dices }));
 
+// onclick sur Show/Hide
+document.getElementById('showScores')
+  .addEventListener('click', resultToggle);
+
+
 player.writeResult();
 dices.display(player.dices);
-window.dices = dices;
-window.player = player;
-// window.card = cards;

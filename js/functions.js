@@ -1,5 +1,33 @@
 const $counter = document.querySelector('.counter');
 const $paquet = document.querySelector('.paquet');
+const $results = document.querySelector('.results');
+
+let hiddenScores = true;
+
+function removeClass(divs, css) {
+  const $divs = document.querySelectorAll(divs);
+  $divs.forEach(($div) => {
+    $div.classList.remove(css);
+  });
+}
+function resultHide() {
+  hiddenScores = true;
+  $results.style.transform = '';
+}
+function resultShow() {
+  hiddenScores = false;
+  $results.style.transform = 'translateY(0)';
+}
+/**
+ * fait disparaitre counter et bouge paquet
+ */
+function endturn() {
+  $counter.style.opacity = 0;
+  setTimeout(() => {
+    $paquet.style.transform = 'translate(125%, 69%) rotate(-180deg)';
+    resultShow();
+  }, 1000);
+}
 
 export function clickDices({ player, dices }) {
   return function clickDice(e) {
@@ -22,28 +50,44 @@ export function clickResult({ dices, player, type, i }) {
     // on sort si tout est cliqué
     if ((player[type][i].isSaved === 0)
     || (player[type][i].isSaved) > 0) return;
-    // const $paquet = document.querySelector('.paquet');
     player[type][i].isSaved = player[type][i].scoreNow;
     e.currentTarget.classList.add('saved');
     const total = document.querySelectorAll('.result').length;
     const saved = document.querySelectorAll('.result.saved').length;
+    // si tous les multis -> cacher le bonus
+    if (type === 'multi') {
+      const multis = document.querySelectorAll('.multi').length;
+      const multiSaved = document.querySelectorAll('.multi.saved').length;
+      if (multis === multiSaved) {
+        document.querySelector('#sum').style = 'opacity: 0';
+      }
+    }
+
     if (saved === total) {
       // fin de partie
-      player.counter = 0;
-      player.writeResult();
-      dices.display(player.dices);
+      endturn();
+      player.endgame();
+      // cache les 2 divs de results
+      const $total = document.querySelector('#total');
+      $total.classList.add('endgame');
+      const $divs = document.querySelectorAll('.results>div');
+      $divs[0].style = 'display: none';
+      $divs[1].style = 'display: none';
+
+      // player.writeResult();
+      // dices.display(player.dices);
     } else {
       // nouveau tour
       player.counter = 3;
-      // relancer random
-      dices.parkInAll();
       $paquet.style.transform = '';
       player.dices = player.randomAll();
-      player.writeResult();
+      resultHide();
       setTimeout(() => {
+        dices.parkInAll();
+        player.writeResult();
         dices.display(player.dices);
-        document.querySelector('.counter').style.opacity = 1;
-      }, 500);
+        $counter.style.opacity = 1;
+      }, 600);
     }
     //
   };
@@ -51,29 +95,59 @@ export function clickResult({ dices, player, type, i }) {
 
 export function clickTurn({ player, dices }) {
   return () => {
-    if (player.counter === 0) return;
-    // random les non selectionnes
-    const notSelected = [];
+    if (player.counter === 0 && player.gameover) {
+      // nouvelle partie
+      dices.parkInAll();
+      // cache scores
+      resultHide();
+      // bouge paquet
+      $paquet.style.transform = '';
+      // retirer .selected et .saved
+      removeClass('.dice', '.selected');
+      removeClass('.multi', 'saved');
+      removeClass('.yams', 'saved');
+      // reset #sum
+      document.querySelector('#sum').style = '';
+      // affiche les 2 divs de results
+      const $total = document.querySelector('#total');
+      $total.classList.remove('endgame');
+      const $divs = document.querySelectorAll('.results>div');
+      $divs[0].style = '';
+      $divs[1].style = '';
+      // reset player
+      player.reset();
+      // display dices
+      dices.display(player.dices);
+      return;
+    }
+    // random les selectionnes
+    const selectedDices = [];
     dices.selected.forEach((selected, i) => {
-      if (!selected) {
-        notSelected.push(i);
+      if (selected) {
+        selectedDices.push(i);
         player.random(i);
       }
     });
-    dices.clearSelected();
-    dices.parkIn(notSelected);
+    dices.parkIn(selectedDices);
+    resultHide();
     player.counter -= 1;
     player.writeResult();
     // Redistribution des cartes
     setTimeout(() => {
+      dices.clearSelected();
       dices.display(player.dices);
     }, 400);
-    // si compteur=0 on cache le paquet
     if (player.counter === 0) {
-      $counter.style.opacity = 0;
-      setTimeout(() => {
-        $paquet.style.transform = 'translate(129%, 170%) rotate(-180deg)';
-      }, 1000);
+      // paquet up : fin de tour
+      endturn();
     }
   };
+}
+
+export function resultToggle() {
+  if (hiddenScores) {
+    resultShow();
+  } else {
+    resultHide();
+  }
 }
